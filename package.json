@@ -11,6 +11,7 @@
     "format": "prettier --write \"{src,test,script,config}/**/*.{js,ts,tsx,json}\""
   },
   "dependencies": {
+    "antd": "^5.16.1",
     "classnames": "^2.5.1",
     "core-fe": "link:/Users/kangkenglong/ChanceTop/core-fe-project",
     "react": "^18.2.0",
