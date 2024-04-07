@@ -1,0 +1,21 @@
+.meetingRoomCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+
+    :global {
+        .meeting-room-info {
+            font-size: 12px;
+            line-height: 20px;
+        }
+    }
+}
+
+.meetingRoomCardSelected {
+    border: 1px solid #657cff;
+}
