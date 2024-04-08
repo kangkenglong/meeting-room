@@ -5,10 +5,14 @@ const MEETING_ROOM_NAME = 'meetingRoom';
 type MeetingRoomModuleName = typeof MEETING_ROOM_NAME;
 
 type MeetingScheduleInfo = {
-    timeId: number;
-    ownerId: string;
-    ownerName: string;
-    participant: {
+    timeId: string;
+    timeScope: string;
+    ownerId?: string;
+    ownerName?: string;
+    inUse?: boolean;
+    usePurpose?: string;
+    purposeDescription?: string;
+    participant?: {
         userId: string;
         userName: string;
     }[];
@@ -45,4 +49,5 @@ export {
     type MeetingRoomState,
     type RootState,
     type MeetingRoom,
+    type MeetingScheduleInfo,
 };

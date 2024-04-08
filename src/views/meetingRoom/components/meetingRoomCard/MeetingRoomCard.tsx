@@ -25,7 +25,7 @@ export const MeetingRoomCard = ({
             <div className='meeting-room-info'>
                 <div className='room-id'>会议室编号：{id}</div>
                 <div className='room-name'>会议室名称：{name}</div>
-                <div className='room-state'>空余时长：{freeTime}</div>
+                <div className='room-state'>空余时长：{freeTime} 小时</div>
             </div>
             <div className='right-icon'>{'>'}</div>
         </div>

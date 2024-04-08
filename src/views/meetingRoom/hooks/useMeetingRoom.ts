@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useAction } from "core-fe/src";
-import { MeetingRoom } from "@module/types";
+import type { MeetingRoom, MeetingScheduleInfo } from "@module/types";
 import dayjs from 'dayjs';
+import { DATE_FORMAT } from "../constants";
 import { meetingRoomModule } from '../store';
 import { MeetingRoomInfo } from "../types";
 
@@ -13,19 +14,22 @@ type SearchParams = {
 type UseMeetingRoom = {
     meetingRoomList: MeetingRoomInfo[];
     searchParams: SearchParams;
+    currentRoomSchedule: MeetingScheduleInfo[];
+    handleSearch: (keywords: string) => void;
     handleChangedDate: (date: number) => void;
+    handleUpdateCurrentRoomSchedule: (schedule: MeetingScheduleInfo[]) => void;
 }
 
 export const useMeetingRoom = (): UseMeetingRoom => {
     const [meetingRoomList, setMeetingRoomList] = useState<MeetingRoomInfo[]>([]);
+    const [currentRoomSchedule, setCurrentRoomSchedule] = useState<MeetingScheduleInfo[]>([]);
     const searchParams = useRef<SearchParams>({
         date: '',
         keywords: '',
     });
 
     useEffect(() => {
-        console.log(new Date().valueOf());
-        const date = dayjs(new Date()).format('YYYY-MM-DD');
+        const date = dayjs(new Date()).format(DATE_FORMAT);
 
         handleUpateSearchParams({date});
     }, []);
@@ -39,7 +43,7 @@ export const useMeetingRoom = (): UseMeetingRoom => {
         }
 
         if (keywords.length > 0) {
-            meetingRooms = meetingRooms.filter(({name}) => name.includes(name)) || [];
+            meetingRooms = meetingRooms.filter(({name}) => name.includes(keywords)) || [];
         }
 
         setMeetingRoomList(meetingRooms.map(({id, name, schedule}) => {
@@ -49,8 +53,10 @@ export const useMeetingRoom = (): UseMeetingRoom => {
                 id,
                 name,
                 freeTime: 12 - holpTimes.length,
+                schedule: holpTimes,
             }
         }));
+        setCurrentRoomSchedule([]);
     }
 
     const handleUpateSearchParams = (params: Partial<SearchParams>) => {
@@ -63,14 +69,23 @@ export const useMeetingRoom = (): UseMeetingRoom => {
     }
 
     const handleChangedDate = (date: number) => {
-        console.log(dayjs(date).format('YYYY-MM-DD'));
+        handleUpateSearchParams({date: dayjs(date).format(DATE_FORMAT)});
+    }
 
-        handleUpateSearchParams({date: dayjs(date).format('YYYY-MM-DD')});
+    const handleSearch = (keywords: string) => {
+        handleUpateSearchParams({keywords});
+    }
+
+    const handleUpdateCurrentRoomSchedule = (schedule: MeetingScheduleInfo[]) => {
+        setCurrentRoomSchedule(schedule);
     }
 
     return {
         searchParams: searchParams.current,
+        currentRoomSchedule,
         meetingRoomList,
+        handleSearch,
         handleChangedDate,
+        handleUpdateCurrentRoomSchedule,
     };
 }

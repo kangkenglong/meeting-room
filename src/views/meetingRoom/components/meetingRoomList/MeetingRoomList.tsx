@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAction } from 'core-fe/src';
+import type { MeetingScheduleInfo } from '@module/types';
 import {meetingRoomActions} from '../../store';
 import styles from './MeetingRoomList.module.scss';
 import { MeetingRoomCard } from '../meetingRoomCard/MeetingRoomCard';
@@ -7,15 +8,18 @@ import { MeetingRoomInfo } from '../../types';
 
 type Props = {
     roomList: MeetingRoomInfo[];
+    onChangedSchedule: (schedule: MeetingScheduleInfo[]) => void;
 }
 
-export const MeetingRoomList = ({roomList}: Props) => {
+export const MeetingRoomList = ({
+    roomList,
+    onChangedSchedule,
+}: Props) => {
     const [currentRoomId, setCurrentRoomId] = useState('');
-    console.log(meetingRoomActions);
 
     useEffect(() => {
         handleInitCurrentRoomId();
-    }, []);
+    }, [roomList]);
 
     const handleInitCurrentRoomId = () => {
         if (roomList.length === 0) {
@@ -34,11 +38,14 @@ export const MeetingRoomList = ({roomList}: Props) => {
             return;
         }
 
+        const room = roomList.find(({id: roomId}) => id === roomId);
+
         setCurrentRoomId(id);
+        onChangedSchedule(room?.schedule || []);
     }
 
     const renderRoomList = () => {
-        return roomList.map(({id, name}, index) => {
+        return roomList.map(({id, name, freeTime}, index) => {
             const isSelected = id === currentRoomId;
 
             return (
@@ -47,7 +54,7 @@ export const MeetingRoomList = ({roomList}: Props) => {
                     isSelected={isSelected}
                     id={id}
                     name={name}
-                    freeTime={0}
+                    freeTime={freeTime}
                     onClick={handleChangedCurrentRoomId}
                 />
             );

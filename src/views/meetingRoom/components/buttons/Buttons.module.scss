@@ -1,0 +1,28 @@
+.buttons {
+    display: flex;
+    gap: 12px;
+
+    :global {
+        button {
+            padding: 8px 12px;
+            font-size: 12px;
+            line-height: 12px;
+            color: #fff;
+            border-radius: 8px;
+        }
+
+        .button {
+            &-add {
+                background-color: #395aff;
+            }
+
+            &-edit {
+                background-color: #ffa639;
+            }
+
+            &-delete {
+                background-color: #c84332;
+            }
+        }
+    }
+}
