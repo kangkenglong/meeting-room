@@ -1,0 +1,21 @@
+.scheduleInfoForm {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #fafafa;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 12px;
+
+    :global {
+        .info-item {
+            &__label {
+                .require-tips {
+                    font-size: 16px;
+                    color: #f23737;
+                }
+            }
+        }
+    }
+}

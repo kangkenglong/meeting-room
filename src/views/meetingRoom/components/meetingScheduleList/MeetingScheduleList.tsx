@@ -5,11 +5,13 @@ import { MeetingScheduleCard } from '../meetingScheduleCard/MeetingScheduleCard'
 import styles from './MeetingScheduleList.module.scss';
 
 type Props = {
+    currentTimeId: string;
     meetingRoomSchedule: MeetingScheduleInfo[];
     onChangedSchedule: (schedule: MeetingScheduleInfo) => void;
 }
 
 export const MeetingScheduleList = ({
+    currentTimeId = '',
     meetingRoomSchedule,
     onChangedSchedule,
 }: Props) => {
@@ -35,7 +37,7 @@ export const MeetingScheduleList = ({
         if (!schedule) {
             return;
         }
-        
+
         onChangedSchedule(schedule);
     }
 
@@ -45,6 +47,8 @@ export const MeetingScheduleList = ({
         }
 
         return scheduleList.map(({timeId, timeScope, inUse, usePurpose, ownerName}) => {
+            const isSelected = timeId === currentTimeId;
+
             return (
                 <MeetingScheduleCard
                     key={`timeCard-${timeId}`}
@@ -52,6 +56,7 @@ export const MeetingScheduleList = ({
                     inUse={inUse}
                     usePurpose={usePurpose}
                     userName={ownerName}
+                    isSelected={isSelected}
                     onClick={() => handleChangedSchedule(timeId)}
                 />
             )

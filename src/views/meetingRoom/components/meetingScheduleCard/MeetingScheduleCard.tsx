@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import styles from './MeetingScheduleCard.module.scss';
 
 type Props = {
@@ -5,6 +6,7 @@ type Props = {
     inUse?: boolean;
     userName?: string;
     usePurpose?: string;
+    isSelected?: boolean;
     onClick: () => void;
 }
 
@@ -12,11 +14,16 @@ export const MeetingScheduleCard = ({
     timeScope,
     onClick,
     inUse = false,
+    isSelected = false,
     userName = '无',
     usePurpose = '无',
 }: Props) => {
+    const classname = classNames(styles.meetingScheduleCard, {
+        [styles.meetingScheduleCardSelected]: isSelected,
+    });
+
     return (
-        <div className={styles.meetingScheduleCard} onClick={onClick}>
+        <div className={classname} onClick={onClick}>
             <div className='schedule-info'>
                 <p>时间：{timeScope}</p>
                 <p>使用者：{userName}</p>

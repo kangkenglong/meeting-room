@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAction } from 'core-fe/src';
 import type { MeetingScheduleInfo } from '@module/types';
-import {meetingRoomActions} from '../../store';
+import {meetingRoomActions} from '@store/meetingRoom';
 import styles from './MeetingRoomList.module.scss';
 import { MeetingRoomCard } from '../meetingRoomCard/MeetingRoomCard';
 import { MeetingRoomInfo } from '../../types';

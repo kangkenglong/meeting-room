@@ -3,7 +3,7 @@ import { useAction } from "core-fe/src";
 import type { MeetingRoom, MeetingScheduleInfo } from "@module/types";
 import dayjs from 'dayjs';
 import { DATE_FORMAT } from "../constants";
-import { meetingRoomModule } from '../store';
+import { meetingRoomModule } from '@store/meetingRoom';
 import { MeetingRoomInfo } from "../types";
 
 type SearchParams = {

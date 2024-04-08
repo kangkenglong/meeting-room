@@ -2,7 +2,8 @@ import type { MeetingScheduleInfo } from '@module/types';
 import styles from './MeetingRoomSchedule.module.scss';
 import { Buttons } from '../buttons/Buttons';
 import { MeetingScheduleList } from '../meetingScheduleList/MeetingScheduleList';
-import { useState } from 'react';
+import { ScheduleInfo } from '../scheduleInfo/ScheduleInfo';
+import { useMeetingRoomSchedule } from '../../hooks/useMeetingRoomSchedule';
 
 type Props = {
     meetingRoomSchedule: MeetingScheduleInfo[];
@@ -11,18 +12,22 @@ type Props = {
 export const MeetingRoomSchedule = ({
     meetingRoomSchedule,
 }: Props) => {
-    const [currentSchedule, setCurrentSchedule] = useState<MeetingScheduleInfo>();
-
-    const handleChangedSchedule = (schedule: MeetingScheduleInfo) => {
-        setCurrentSchedule(schedule);
-    }
+    const {
+        currentSchedule,
+        scheduleFormData,
+        handleChangedSchedule,
+        handleGetButtonConfig,
+        handleUpdateFormData,
+    } = useMeetingRoomSchedule();
 
     const renderButtons = () => {
         if (!currentSchedule) {
             return null;
         }
 
-        return <Buttons config={[]} />;
+        const config = handleGetButtonConfig();
+
+        return <Buttons config={config} />;
     }
 
     return (
@@ -31,14 +36,18 @@ export const MeetingRoomSchedule = ({
                 <div className='title'>
                     <span>日程</span>
                 </div>
-                <MeetingScheduleList meetingRoomSchedule={meetingRoomSchedule} onChangedSchedule={handleChangedSchedule} />
+                <MeetingScheduleList
+                    currentTimeId={currentSchedule?.timeId || ''}
+                    meetingRoomSchedule={meetingRoomSchedule}
+                    onChangedSchedule={handleChangedSchedule}
+                />
             </div>
             <div className='schedule-info'>
                 <div className='title title-options'>
                     <span>日程详情</span>
                     {renderButtons()}
                 </div>
-
+                <ScheduleInfo scheduleInfo={scheduleFormData} onUpdateFormData={handleUpdateFormData} />
             </div>
         </div>
     )

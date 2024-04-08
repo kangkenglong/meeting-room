@@ -16,7 +16,14 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                height: 42px;
             }
+        }
+
+        .schedule-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
     }
 }

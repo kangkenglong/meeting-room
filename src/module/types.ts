@@ -4,6 +4,10 @@ const MEETING_ROOM_NAME = 'meetingRoom';
 
 type MeetingRoomModuleName = typeof MEETING_ROOM_NAME;
 
+const USER_NAME = 'user';
+
+type UserModuleName = typeof USER_NAME;
+
 type MeetingScheduleInfo = {
     timeId: string;
     timeScope: string;
@@ -12,10 +16,7 @@ type MeetingScheduleInfo = {
     inUse?: boolean;
     usePurpose?: string;
     purposeDescription?: string;
-    participant?: {
-        userId: string;
-        userName: string;
-    }[];
+    participant?: string[];
 }
 
 // type ScheduleInfo = {
@@ -37,16 +38,30 @@ type MeetingRoomState = {
     meetingRooms: MeetingRoom[];
 }
 
+type UserInfo = {
+    userId: string;
+    userName: string;
+}
+
+type UserState = {
+    userInfo: UserInfo;
+}
+
 interface RootState extends State {
     app: {
         [MEETING_ROOM_NAME]: MeetingRoomState,
+        [USER_NAME]: UserState,
     }
 }
 
 export {
+    USER_NAME,
     MEETING_ROOM_NAME,
+    type UserModuleName,
     type MeetingRoomModuleName,
     type MeetingRoomState,
+    type UserState,
+    type UserInfo,
     type RootState,
     type MeetingRoom,
     type MeetingScheduleInfo,
