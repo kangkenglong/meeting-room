@@ -14,6 +14,9 @@ dependencies:
   core-fe:
     specifier: link:/Users/kangkenglong/ChanceTop/core-fe-project
     version: link:../core-fe-project
+  dayjs:
+    specifier: ^1.11.10
+    version: 1.11.10
   react:
     specifier: ^18.2.0
     version: 18.2.0

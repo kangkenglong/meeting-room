@@ -14,17 +14,4 @@ export class MeetingRoomModule extends Module<RootState, MeetingRoomModuleName> 
     getMeetingRooms(): MeetingRoom[] {
         return this.state.meetingRooms;
     }
-
-    *addRoom(): SagaGenerator {
-        this.setState((draft) => {
-            draft.meetingRooms = [
-                ...draft.meetingRooms,
-                {
-                    id: '444',
-                    name: '123123',
-                    schedule: [],
-                }
-            ]
-        });
-    }
 }

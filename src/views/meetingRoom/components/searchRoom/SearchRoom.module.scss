@@ -1,9 +1,34 @@
 .searchRoom {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
     width: 100%;
     height: 50px;
     padding: 12px;
+    box-shadow: 0 0 5px #ccc;
 
     :global {
-        
+        .icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .search__input {
+            font-size: 12px;
+            flex: 1;
+        }
+
+        .calendar__popup {
+            position: absolute;
+            top: 40px;
+            left: 12px;
+            border: 1px solid #ccc;
+            width: 260px;
+            // height: 200px;
+            background-color: #fff;
+        }
     }
 }

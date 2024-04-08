@@ -7,16 +7,19 @@ import { useMeetingRoom } from './hooks/useMeetingRoom';
 
 export const MeetingRoom = () => {
     const {
-        meetingRooms,
+        searchParams,
+        meetingRoomList,
+        handleChangedDate,
     } = useMeetingRoom();
+    const {keywords, date} = searchParams;
 
     return (
         <div className={styles.meetingRoom}>
             <Header />
             <div className='content'>
                 <div className='content--left'>
-                    <SearchRoom />
-                    <MeetingRoomList roomList={meetingRooms} />
+                    <SearchRoom currentDate={date} keywords={keywords} onChangedDate={handleChangedDate} />
+                    <MeetingRoomList roomList={meetingRoomList} />
                 </div>
                 <div className='content--right'>
                     <MeetingRoomSchedule />

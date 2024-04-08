@@ -7,17 +7,17 @@ const state = {
         {
             id: '111',
             name: '筼筜湖',
-            schedule: [],
+            schedule: {},
         },
         {
             id: '222',
             name: '日月潭',
-            schedule: [],
+            schedule: {},
         },
         {
             id: '333',
             name: '东山岛',
-            schedule: [],
+            schedule: {},
         }
     ]
 }

@@ -1,17 +1,16 @@
-import { MeetingRoom } from '@module/types';
+import { useEffect, useState } from 'react';
 import { useAction } from 'core-fe/src';
 import {meetingRoomActions} from '../../store';
 import styles from './MeetingRoomList.module.scss';
 import { MeetingRoomCard } from '../meetingRoomCard/MeetingRoomCard';
-import { useEffect, useState } from 'react';
+import { MeetingRoomInfo } from '../../types';
 
 type Props = {
-    roomList: MeetingRoom[];
+    roomList: MeetingRoomInfo[];
 }
 
 export const MeetingRoomList = ({roomList}: Props) => {
     const [currentRoomId, setCurrentRoomId] = useState('');
-    const addRoom = useAction(meetingRoomActions.addRoom);
     console.log(meetingRoomActions);
 
     useEffect(() => {
@@ -36,8 +35,6 @@ export const MeetingRoomList = ({roomList}: Props) => {
         }
 
         setCurrentRoomId(id);
-
-        addRoom();
     }
 
     const renderRoomList = () => {

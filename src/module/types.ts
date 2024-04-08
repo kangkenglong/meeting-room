@@ -14,19 +14,19 @@ type MeetingScheduleInfo = {
     }[];
 }
 
-type ScheduleInfo = {
-    freeTime: number;
-    meetings: MeetingScheduleInfo;
-}
+// type ScheduleInfo = {
+//     freeTime: number;
+//     meetings: MeetingScheduleInfo;
+// }
 
 type MeetingSchedule = {
-    [timestamp: string]: ScheduleInfo;
+    [timestamp: string]: MeetingScheduleInfo[];
 }
 
 type MeetingRoom = {
     id: string;
     name: string;
-    schedule: MeetingSchedule[];
+    schedule: MeetingSchedule;
 }
 
 type MeetingRoomState = {
