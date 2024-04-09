@@ -3,23 +3,24 @@ import type { MeetingScheduleInfo } from '@module/types';
 import { SCHEDULE_LIST } from '../../constants';
 import { MeetingScheduleCard } from '../meetingScheduleCard/MeetingScheduleCard';
 import styles from './MeetingScheduleList.module.scss';
+import { MeetingRoomInfo } from '../../types';
 
 type Props = {
     currentTimeId: string;
-    meetingRoomSchedule: MeetingScheduleInfo[];
+    meetingRoom: MeetingRoomInfo;
     onChangedSchedule: (schedule: MeetingScheduleInfo) => void;
 }
 
 export const MeetingScheduleList = ({
     currentTimeId = '',
-    meetingRoomSchedule,
+    meetingRoom,
     onChangedSchedule,
 }: Props) => {
     const [scheduleList, setScheduleList] = useState<MeetingScheduleInfo[]>([]);
 
     useEffect(() => {
         const schedules = SCHEDULE_LIST.map(({timeId, timeScope}) => {
-            const schedule = meetingRoomSchedule.find(({timeId: id}) => id === timeId);
+            const schedule = meetingRoom.schedule.find(({timeId: id}) => id === timeId);
 
             return {
                 timeId,
@@ -29,7 +30,7 @@ export const MeetingScheduleList = ({
         });
 
         setScheduleList(schedules);
-    }, [meetingRoomSchedule]);
+    }, [meetingRoom]);
 
     const handleChangedSchedule = (timeId: string) => {
         const schedule = scheduleList.find(({timeId: id}) => id === timeId);

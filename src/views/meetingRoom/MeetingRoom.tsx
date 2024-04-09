@@ -8,12 +8,14 @@ import { useMeetingRoom } from './hooks/useMeetingRoom';
 export const MeetingRoom = () => {
     const {
         searchParams,
-        currentRoomSchedule,
+        currentMeetingRoom,
         meetingRoomList,
         handleSearch,
         handleChangedDate,
-        handleUpdateCurrentRoomSchedule,
+        // handleUpdateCurrentMeetingRoom,
+        handleUpdateCurrentMeetingRoomId,
     } = useMeetingRoom();
+    const currentMeetingRoomId = currentMeetingRoom?.id || '';
     const {date} = searchParams;
 
     return (
@@ -22,10 +24,10 @@ export const MeetingRoom = () => {
             <div className='content'>
                 <div className='content--left'>
                     <SearchRoom currentDate={date} onSearch={handleSearch} onChangedDate={handleChangedDate} />
-                    <MeetingRoomList roomList={meetingRoomList} onChangedSchedule={handleUpdateCurrentRoomSchedule} />
+                    <MeetingRoomList currentRoomId={currentMeetingRoomId} roomList={meetingRoomList} onChangedMeetingRoomId={handleUpdateCurrentMeetingRoomId} />
                 </div>
                 <div className='content--right'>
-                    <MeetingRoomSchedule meetingRoomSchedule={currentRoomSchedule} />
+                    <MeetingRoomSchedule meetingRoom={currentMeetingRoom} />
                 </div>
             </div>
         </div>

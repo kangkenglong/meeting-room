@@ -1,16 +1,16 @@
-import type { MeetingScheduleInfo } from '@module/types';
 import styles from './MeetingRoomSchedule.module.scss';
 import { Buttons } from '../buttons/Buttons';
 import { MeetingScheduleList } from '../meetingScheduleList/MeetingScheduleList';
 import { ScheduleInfo } from '../scheduleInfo/ScheduleInfo';
 import { useMeetingRoomSchedule } from '../../hooks/useMeetingRoomSchedule';
+import { MeetingRoomInfo } from '../../types';
 
 type Props = {
-    meetingRoomSchedule: MeetingScheduleInfo[];
+    meetingRoom: MeetingRoomInfo | null;
 }
 
 export const MeetingRoomSchedule = ({
-    meetingRoomSchedule,
+    meetingRoom,
 }: Props) => {
     const {
         currentSchedule,
@@ -18,7 +18,7 @@ export const MeetingRoomSchedule = ({
         handleChangedSchedule,
         handleGetButtonConfig,
         handleUpdateFormData,
-    } = useMeetingRoomSchedule();
+    } = useMeetingRoomSchedule({meetingRoom});
 
     const renderButtons = () => {
         if (!currentSchedule) {
@@ -30,25 +30,37 @@ export const MeetingRoomSchedule = ({
         return <Buttons config={config} />;
     }
 
+    const renderContent = () => {
+        if (!meetingRoom) {
+            return null;
+        }
+
+        return (
+            <>
+                <div className='schedule-list'>
+                    <div className='title'>
+                        <span>日程</span>
+                    </div>
+                    <MeetingScheduleList
+                        currentTimeId={currentSchedule?.timeId || ''}
+                        meetingRoom={meetingRoom}
+                        onChangedSchedule={handleChangedSchedule}
+                    />
+                </div>
+                <div className='schedule-info'>
+                    <div className='title title-options'>
+                        <span>日程详情</span>
+                        {renderButtons()}
+                    </div>
+                    <ScheduleInfo scheduleInfo={scheduleFormData} onUpdateFormData={handleUpdateFormData} />
+                </div>
+            </>
+        )
+    }
+
     return (
         <div className={styles.meetingRoomSchedule}>
-            <div className='schedule-list'>
-                <div className='title'>
-                    <span>日程</span>
-                </div>
-                <MeetingScheduleList
-                    currentTimeId={currentSchedule?.timeId || ''}
-                    meetingRoomSchedule={meetingRoomSchedule}
-                    onChangedSchedule={handleChangedSchedule}
-                />
-            </div>
-            <div className='schedule-info'>
-                <div className='title title-options'>
-                    <span>日程详情</span>
-                    {renderButtons()}
-                </div>
-                <ScheduleInfo scheduleInfo={scheduleFormData} onUpdateFormData={handleUpdateFormData} />
-            </div>
+            {renderContent()}
         </div>
     )
 }

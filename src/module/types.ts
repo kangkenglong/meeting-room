@@ -11,6 +11,8 @@ type UserModuleName = typeof USER_NAME;
 type MeetingScheduleInfo = {
     timeId: string;
     timeScope: string;
+    // date: string;
+    // roomId: string;
     ownerId?: string;
     ownerName?: string;
     inUse?: boolean;
@@ -47,6 +49,17 @@ type UserState = {
     userInfo: UserInfo;
 }
 
+type ReserveParams = {
+    roomId: string;
+    date: string;
+} & MeetingScheduleInfo;
+
+type DeleteScheduleParams = {
+    roomId: string;
+    date: string;
+    timeId: string;
+}
+
 interface RootState extends State {
     app: {
         [MEETING_ROOM_NAME]: MeetingRoomState,
@@ -65,4 +78,6 @@ export {
     type RootState,
     type MeetingRoom,
     type MeetingScheduleInfo,
+    type ReserveParams,
+    type DeleteScheduleParams,
 };

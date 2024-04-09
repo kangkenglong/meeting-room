@@ -1,22 +1,103 @@
+import { useUnaryAction } from "core-fe/src";
 import { MeetingScheduleInfo } from "@module/types";
 import { userModule } from "@store/user";
-import { useState } from "react";
+import { meetingRoomActions } from "@store/meetingRoom";
+import { useEffect, useState } from "react";
 import { BUTTON_TYPE } from "../constants";
-import { ButtonsConfig } from "../types";
+import { ButtonsConfig, MeetingRoomInfo } from "../types";
+
+type Props = {
+    meetingRoom: MeetingRoomInfo | null;
+}
 
 type UseMeetingRoomSchedule = {
     currentUserId: string;
-    currentSchedule: MeetingScheduleInfo | undefined;
+    currentSchedule: MeetingScheduleInfo | null;
     scheduleFormData: Partial<MeetingScheduleInfo>;
     handleChangedSchedule: (schedule: MeetingScheduleInfo) => void;
     handleUpdateFormData: (formData: Partial<MeetingScheduleInfo>) => void;
     handleGetButtonConfig: () => ButtonsConfig[];
 }
 
-export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
-    const [currentSchedule, setCurrentSchedule] = useState<MeetingScheduleInfo>();
+export const useMeetingRoomSchedule = ({
+    meetingRoom,
+}: Props): UseMeetingRoomSchedule => {
+    const [currentSchedule, setCurrentSchedule] = useState<MeetingScheduleInfo | null>(null);
     const [scheduleFormData, setScheduleFormData] = useState<Partial<MeetingScheduleInfo>>({});
     const {userId: currentUserId, userName: currentUserName} = userModule.state.userInfo;
+    const reserveMeetingRoom = useUnaryAction(meetingRoomActions.reserveMeetingRoom);
+    const updateSchedule = useUnaryAction(meetingRoomActions.updateSchedule);
+    const deleteSchedule = useUnaryAction(meetingRoomActions.deleteSchedule);
+
+    useEffect(() => {
+        if (meetingRoom && meetingRoom.id) {
+            console.log(1);
+            setCurrentSchedule(null);
+            setScheduleFormData({});
+        }
+    }, [meetingRoom?.id]);
+
+    useEffect(() => {
+        console.log(2);
+        if (!meetingRoom || !currentSchedule) {
+            return;
+        }
+
+        if (meetingRoom.schedule.length === 0) {
+            setCurrentSchedule(null);
+            setScheduleFormData({});
+            return;
+        }
+
+        const newCurrentSchedule = meetingRoom.schedule.find(({timeId}) => timeId === currentSchedule.timeId);
+
+        if (newCurrentSchedule) {
+            setCurrentSchedule(newCurrentSchedule);
+        }
+    }, [meetingRoom]);
+
+    const handleReserveMeetingRoom = () => {
+        if (!meetingRoom) {
+            return;
+        }
+
+        const {id: roomId, date} = meetingRoom;
+
+        reserveMeetingRoom({
+            roomId,
+            date,
+            inUse: true,
+            ...scheduleFormData as MeetingScheduleInfo,
+        });
+    }
+
+    const handleUpdateSchedule = () => {
+        if (!meetingRoom) {
+            return;
+        }
+
+        const {id: roomId, date} = meetingRoom;
+
+        updateSchedule({
+            roomId,
+            date,
+            ...scheduleFormData as MeetingScheduleInfo,
+        });
+    }
+
+    const handleDeleteSchedule = () => {
+        if (!meetingRoom || !scheduleFormData.timeId) {
+            return;
+        }
+
+        const {id: roomId, date} = meetingRoom;
+
+        deleteSchedule({
+            roomId,
+            date,
+            timeId: scheduleFormData.timeId,
+        });
+    }
 
     const handleGetButtonConfig = (): ButtonsConfig[] => {
         if (!currentSchedule) {
@@ -30,7 +111,7 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
             buttonConfig.push({
                 type: BUTTON_TYPE.ADD,
                 label: '预定',
-                onClick: () => {},
+                onClick: handleReserveMeetingRoom,
             });
         }
 
@@ -38,12 +119,12 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
             buttonConfig.push({
                 type: BUTTON_TYPE.EDIT,
                 label: '编辑',
-                onClick: () => {},
+                onClick: handleUpdateSchedule,
             });
             buttonConfig.push({
                 type: BUTTON_TYPE.DELETE,
                 label: '删除',
-                onClick: () => {},
+                onClick: handleDeleteSchedule,
             });
         }
 

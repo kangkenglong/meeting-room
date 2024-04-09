@@ -8,40 +8,40 @@ import { MeetingRoomInfo } from '../../types';
 
 type Props = {
     roomList: MeetingRoomInfo[];
-    onChangedSchedule: (schedule: MeetingScheduleInfo[]) => void;
+    currentRoomId: string;
+    onChangedMeetingRoomId: (id: string) => void;
 }
 
 export const MeetingRoomList = ({
     roomList,
-    onChangedSchedule,
+    currentRoomId,
+    onChangedMeetingRoomId,
 }: Props) => {
-    const [currentRoomId, setCurrentRoomId] = useState('');
+    // const [currentRoomId, setCurrentRoomId] = useState('');
 
-    useEffect(() => {
-        handleInitCurrentRoomId();
-    }, [roomList]);
+    // useEffect(() => {
+    //     handleInitCurrentRoomId();
+    // }, [roomList]);
 
-    const handleInitCurrentRoomId = () => {
-        if (roomList.length === 0) {
-            return;
-        }
+    // const handleInitCurrentRoomId = () => {
+    //     if (roomList.length === 0) {
+    //         return;
+    //     }
 
-        if (currentRoomId.length !== 0) {
-            return;
-        }
+    //     if (currentRoomId.length !== 0) {
+    //         return;
+    //     }
 
-        setCurrentRoomId(roomList[0].id);
-    }
+    //     setCurrentRoomId(roomList[0].id);
+    // }
 
     const handleChangedCurrentRoomId = (id: string) => {
         if (id === currentRoomId) {
             return;
         }
 
-        const room = roomList.find(({id: roomId}) => id === roomId);
-
-        setCurrentRoomId(id);
-        onChangedSchedule(room?.schedule || []);
+        // setCurrentRoomId(id);
+        onChangedMeetingRoomId(id);
     }
 
     const renderRoomList = () => {
