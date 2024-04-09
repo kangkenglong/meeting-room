@@ -5,16 +5,8 @@ import { ScheduleInfo } from '../scheduleInfo/ScheduleInfo';
 import { useMeetingRoomSchedule } from '../../hooks/useMeetingRoomSchedule';
 
 export const MeetingRoomSchedule = () => {
-    const {
-        contextHolder,
-        currentSchedule,
-        scheduleFormData,
-        currentMeetingRoom,
-        handleChangedSchedule,
-        handleGetButtonConfig,
-        handleUpdateFormData,
-    } = useMeetingRoomSchedule();
-    console.log(111);
+    const { contextHolder, currentSchedule, scheduleFormData, currentMeetingRoom, handleChangedSchedule, handleGetButtonConfig, handleUpdateFormData } =
+        useMeetingRoomSchedule();
 
     const renderButtons = () => {
         if (!currentSchedule) {
@@ -24,7 +16,7 @@ export const MeetingRoomSchedule = () => {
         const config = handleGetButtonConfig();
 
         return <Buttons config={config} />;
-    }
+    };
 
     const renderContent = () => {
         if (!currentMeetingRoom) {
@@ -33,8 +25,8 @@ export const MeetingRoomSchedule = () => {
 
         return (
             <>
-                <div className='schedule-list'>
-                    <div className='title'>
+                <div className="schedule-list">
+                    <div className="title">
                         <span>日程</span>
                     </div>
                     <MeetingScheduleList
@@ -43,23 +35,21 @@ export const MeetingRoomSchedule = () => {
                         onChangedSchedule={handleChangedSchedule}
                     />
                 </div>
-                <div className='schedule-info'>
-                    <div className='title title-options'>
+                <div className="schedule-info">
+                    <div className="title title-options">
                         <span>日程详情</span>
                         {renderButtons()}
                     </div>
                     <ScheduleInfo scheduleInfo={scheduleFormData} onUpdateFormData={handleUpdateFormData} />
                 </div>
             </>
-        )
-    }
+        );
+    };
 
     return (
         <>
-            <div className={styles.meetingRoomSchedule}>
-                {renderContent()}
-            </div>
+            <div className={styles.meetingRoomSchedule}>{renderContent()}</div>
             {contextHolder}
         </>
-    )
-}
+    );
+};

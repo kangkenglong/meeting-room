@@ -6,23 +6,19 @@ type Props = {
     roomList: MeetingRoomInfoBySearch[];
     currentRoomId: string;
     onChangedMeetingRoomId: (id: string) => void;
-}
+};
 
-export const MeetingRoomList = ({
-    roomList,
-    currentRoomId,
-    onChangedMeetingRoomId,
-}: Props) => {
+export const MeetingRoomList = ({ roomList, currentRoomId, onChangedMeetingRoomId }: Props) => {
     const handleChangedCurrentRoomId = (id: string) => {
         if (id === currentRoomId) {
             return;
         }
 
         onChangedMeetingRoomId(id);
-    }
+    };
 
     const renderRoomList = () => {
-        return roomList.map(({id, name, freeTime}, index) => {
+        return roomList.map(({ id, name, freeTime }, index) => {
             const isSelected = id === currentRoomId;
 
             return (
@@ -36,11 +32,7 @@ export const MeetingRoomList = ({
                 />
             );
         });
-    }
+    };
 
-    return (
-        <div className={styles.meetingRoomList}>
-            {renderRoomList()}
-        </div>
-    )
-}
+    return <div className={styles.meetingRoomList}>{renderRoomList()}</div>;
+};

@@ -17,19 +17,18 @@ const mockParticipantOptions = [
 
 type Props = {
     value: string[];
+    isReadOnly: boolean;
     onChanged: (value: string[]) => void;
-}
+};
 
-export const ParticipantSelector = ({
-    value = [],
-    onChanged,
-}: Props) => {
+export const ParticipantSelector = ({ value = [], isReadOnly, onChanged }: Props) => {
     const handleChanged = (value: string[]) => {
         onChanged(value);
-    }
+    };
 
     return (
         <Select
+            disabled={isReadOnly}
             mode="multiple"
             allowClear
             style={{ width: '200px', fontSize: '12px' }}
@@ -38,5 +37,5 @@ export const ParticipantSelector = ({
             onChange={handleChanged}
             options={mockParticipantOptions}
         />
-    )
+    );
 };

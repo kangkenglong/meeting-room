@@ -1,12 +1,11 @@
-import { useSelector, useUnaryAction } from "core-fe/src";
+import { useSelector, useUnaryAction } from 'core-fe/src';
 import { message } from 'antd';
-import { MEETING_ROOM_NAME } from "@module/types";
-import type { MeetingRoomInfoBySearch, MeetingScheduleInfo, RootState } from "@module/types";
-import { userModule } from "@store/user";
-import { meetingRoomActions } from "@store/meetingRoom";
-import { useEffect, useRef, useState } from "react";
-import { BUTTON_TYPE, SCHEDULE_LIST } from "../constants";
-import { ButtonsConfig } from "../types";
+import { MEETING_ROOM_NAME, type MeetingRoomInfoBySearch, type MeetingScheduleInfo, type RootState } from '@module/types';
+import { userModule } from '@store/user';
+import { meetingRoomActions } from '@store/meetingRoom';
+import { useEffect, useRef, useState } from 'react';
+import { BUTTON_TYPE, SCHEDULE_LIST } from '../constants';
+import { ButtonsConfig } from '../types';
 
 type UseMeetingRoomSchedule = {
     contextHolder: React.ReactElement;
@@ -17,7 +16,7 @@ type UseMeetingRoomSchedule = {
     handleChangedSchedule: (schedule: MeetingScheduleInfo) => void;
     handleUpdateFormData: (formData: Partial<MeetingScheduleInfo>) => void;
     handleGetButtonConfig: () => ButtonsConfig[];
-}
+};
 
 export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
     const currentMeetingRoom = useSelector<RootState, MeetingRoomInfoBySearch | null>((state) => {
@@ -29,7 +28,7 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
 
     const [messageApi, contextHolder] = message.useMessage();
 
-    const {userId: currentUserId, userName: currentUserName} = userModule.state.userInfo;
+    const { userId: currentUserId, userName: currentUserName } = userModule.state.userInfo;
     const reserveMeetingRoom = useUnaryAction(meetingRoomActions.reserveMeetingRoom);
     const updateSchedule = useUnaryAction(meetingRoomActions.updateSchedule);
     const deleteSchedule = useUnaryAction(meetingRoomActions.deleteSchedule);
@@ -45,7 +44,7 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
             return;
         }
 
-        const newCurrentSchedule = currentMeetingRoom.schedule.find(({timeId}) => timeId === currentSchedule!.timeId);
+        const newCurrentSchedule = currentMeetingRoom.schedule.find(({ timeId }) => timeId === currentSchedule!.timeId);
 
         if (!newCurrentSchedule) {
             handleClearState();
@@ -55,18 +54,18 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
         setCurrentSchedule(newCurrentSchedule);
     }, [currentMeetingRoom]);
 
-    const isNeedSetDefaultSchedule = (meetingRoom: MeetingRoomInfoBySearch): boolean => {
+    function isNeedSetDefaultSchedule(meetingRoom: MeetingRoomInfoBySearch): boolean {
         return !lastMeetingRoomId.current || lastMeetingRoomId.current !== meetingRoom.id || !currentSchedule;
-    }
+    };
 
     const verifyReserveRequestParams = (): boolean => {
         return Boolean(scheduleFormData.usePurpose?.length);
-    }
+    };
 
-    const handleClearState = () => {
+    function handleClearState() {
         setCurrentSchedule(null);
         setScheduleFormData({});
-    }
+    };
 
     const handleReserveMeetingRoom = () => {
         if (!currentMeetingRoom) {
@@ -78,15 +77,15 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
             return;
         }
 
-        const {id: roomId, date} = currentMeetingRoom;
+        const { id: roomId, date } = currentMeetingRoom;
 
         reserveMeetingRoom({
             roomId,
             date,
             inUse: true,
-            ...scheduleFormData as MeetingScheduleInfo,
+            ...(scheduleFormData as MeetingScheduleInfo),
         });
-    }
+    };
 
     const handleUpdateSchedule = () => {
         if (!currentMeetingRoom) {
@@ -98,28 +97,28 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
             return;
         }
 
-        const {id: roomId, date} = currentMeetingRoom;
+        const { id: roomId, date } = currentMeetingRoom;
 
         updateSchedule({
             roomId,
             date,
-            ...scheduleFormData as MeetingScheduleInfo,
+            ...(scheduleFormData as MeetingScheduleInfo),
         });
-    }
+    };
 
     const handleDeleteSchedule = () => {
         if (!currentMeetingRoom || !scheduleFormData.timeId) {
             return;
         }
 
-        const {id: roomId, date} = currentMeetingRoom;
+        const { id: roomId, date } = currentMeetingRoom;
 
         deleteSchedule({
             roomId,
             date,
             timeId: scheduleFormData.timeId,
         });
-    }
+    };
 
     const handleGetButtonConfig = (): ButtonsConfig[] => {
         if (!currentSchedule) {
@@ -127,7 +126,7 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
         }
 
         const buttonConfig = [];
-        const {inUse, ownerId} = currentSchedule;
+        const { inUse, ownerId } = currentSchedule;
 
         if (!inUse) {
             buttonConfig.push({
@@ -151,9 +150,9 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
         }
 
         return buttonConfig;
-    }
+    };
 
-    const handleSetDefaultSchedule = () => {
+    function handleSetDefaultSchedule() {
         if (!currentMeetingRoom) {
             return;
         }
@@ -172,9 +171,9 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
             return;
         }
 
-        for(let i = 0; i < SCHEDULE_LIST.length; i++) {
+        for (let i = 0; i < SCHEDULE_LIST.length; i++) {
             const schedule = SCHEDULE_LIST[i];
-            const hasSchedule = currentMeetingRoom.schedule.some(({timeId}) => timeId === schedule.timeId);
+            const hasSchedule = currentMeetingRoom.schedule.some(({ timeId }) => timeId === schedule.timeId);
 
             if (!hasSchedule) {
                 setCurrentSchedule(schedule);
@@ -186,28 +185,25 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
                 break;
             }
         }
-    }
+    };
 
     const handleUpdateFormData = (formData: Partial<MeetingScheduleInfo>, isInital = false) => {
-        console.log('formData: ', formData);
-
         let newFormData = {};
 
         if (!isInital) {
             newFormData = {
                 ...scheduleFormData,
-            }
+            };
         }
 
         setScheduleFormData({
             ...newFormData,
             ...formData,
         });
-    }
+    };
 
     const handleChangedSchedule = (schedule: MeetingScheduleInfo) => {
-        console.log('schedule: ', schedule);
-        const {inUse, ownerId, ownerName} = schedule;
+        const { inUse, ownerId, ownerName } = schedule;
         let userName = ownerName;
         let userId = ownerId;
 
@@ -217,12 +213,15 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
         }
 
         setCurrentSchedule(schedule);
-        handleUpdateFormData({
-            ...schedule,
-            ownerName: userName,
-            ownerId: userId,
-        }, true);
-    }
+        handleUpdateFormData(
+            {
+                ...schedule,
+                ownerName: userName,
+                ownerId: userId,
+            },
+            true,
+        );
+    };
 
     return {
         contextHolder,
@@ -233,5 +232,5 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
         handleChangedSchedule,
         handleUpdateFormData,
         handleGetButtonConfig,
-    }
-}
+    };
+};

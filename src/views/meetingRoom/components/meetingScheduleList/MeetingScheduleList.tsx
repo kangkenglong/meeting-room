@@ -8,45 +8,41 @@ type Props = {
     currentTimeId: string;
     meetingRoom: MeetingRoomInfoBySearch;
     onChangedSchedule: (schedule: MeetingScheduleInfo) => void;
-}
+};
 
-export const MeetingScheduleList = ({
-    currentTimeId = '',
-    meetingRoom,
-    onChangedSchedule,
-}: Props) => {
+export const MeetingScheduleList = ({ currentTimeId = '', meetingRoom, onChangedSchedule }: Props) => {
     const [scheduleList, setScheduleList] = useState<MeetingScheduleInfo[]>([]);
 
     useEffect(() => {
-        const schedules = SCHEDULE_LIST.map(({timeId, timeScope}) => {
-            const schedule = meetingRoom.schedule.find(({timeId: id}) => id === timeId);
+        const schedules = SCHEDULE_LIST.map(({ timeId, timeScope }) => {
+            const schedule = meetingRoom.schedule.find(({ timeId: id }) => id === timeId);
 
             return {
                 timeId,
                 timeScope,
                 ...schedule,
-            }
+            };
         });
 
         setScheduleList(schedules);
     }, [meetingRoom]);
 
     const handleChangedSchedule = (timeId: string) => {
-        const schedule = scheduleList.find(({timeId: id}) => id === timeId);
+        const schedule = scheduleList.find(({ timeId: id }) => id === timeId);
 
         if (!schedule) {
             return;
         }
 
         onChangedSchedule(schedule);
-    }
+    };
 
     const renderScheduleList = () => {
         if (scheduleList.length === 0) {
             return null;
         }
 
-        return scheduleList.map(({timeId, timeScope, inUse, usePurpose, ownerName}) => {
+        return scheduleList.map(({ timeId, timeScope, inUse, usePurpose, ownerName }) => {
             const isSelected = timeId === currentTimeId;
 
             return (
@@ -59,13 +55,9 @@ export const MeetingScheduleList = ({
                     isSelected={isSelected}
                     onClick={() => handleChangedSchedule(timeId)}
                 />
-            )
+            );
         });
-    }
+    };
 
-    return (
-        <div className={styles.meetingScheduleList}>
-            {renderScheduleList()}
-        </div>
-    )
-}
+    return <div className={styles.meetingScheduleList}>{renderScheduleList()}</div>;
+};

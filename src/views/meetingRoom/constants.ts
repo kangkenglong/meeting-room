@@ -57,8 +57,4 @@ enum BUTTON_TYPE {
     DELETE = 'delete',
 }
 
-export {
-    DATE_FORMAT,
-    SCHEDULE_LIST,
-    BUTTON_TYPE,
-}
+export { DATE_FORMAT, SCHEDULE_LIST, BUTTON_TYPE };

@@ -1,4 +1,4 @@
-import {type State} from 'core-fe/src';
+import { type State } from 'core-fe/src';
 
 const MEETING_ROOM_NAME = 'meetingRoom';
 
@@ -17,17 +17,17 @@ type MeetingScheduleInfo = {
     usePurpose?: string;
     purposeDescription?: string;
     participant?: string[];
-}
+};
 
 type MeetingSchedule = {
     [timestamp: string]: MeetingScheduleInfo[];
-}
+};
 
 type MeetingRoom = {
     id: string;
     name: string;
     schedule: MeetingSchedule;
-}
+};
 
 type MeetingRoomInfoBySearch = {
     id: string;
@@ -41,16 +41,16 @@ type MeetingRoomState = {
     meetingRooms: MeetingRoom[];
     meetingRoomListBySearch: MeetingRoomInfoBySearch[];
     currentMeetingRoom: MeetingRoomInfoBySearch | null;
-}
+};
 
 type UserInfo = {
     userId: string;
     userName: string;
-}
+};
 
 type UserState = {
     userInfo: UserInfo;
-}
+};
 
 type ReserveParams = {
     roomId: string;
@@ -61,13 +61,13 @@ type DeleteScheduleParams = {
     roomId: string;
     date: string;
     timeId: string;
-}
+};
 
 interface RootState extends State {
     app: {
-        [MEETING_ROOM_NAME]: MeetingRoomState,
-        [USER_NAME]: UserState,
-    }
+        [MEETING_ROOM_NAME]: MeetingRoomState;
+        [USER_NAME]: UserState;
+    };
 }
 
 export {

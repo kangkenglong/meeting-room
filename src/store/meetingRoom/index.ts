@@ -1,4 +1,4 @@
-import {register} from 'core-fe/src';
+import { register } from 'core-fe/src';
 import { MEETING_ROOM_NAME, MeetingRoomState } from '@module/types';
 import { MeetingRoomModule } from './module';
 
@@ -30,11 +30,11 @@ const state: MeetingRoomState = {
             id: '333',
             name: '东山岛',
             schedule: {},
-        }
+        },
     ],
     meetingRoomListBySearch: [],
     currentMeetingRoom: null,
-}
+};
 
 export const meetingRoomModule = new MeetingRoomModule(MEETING_ROOM_NAME, state);
 
