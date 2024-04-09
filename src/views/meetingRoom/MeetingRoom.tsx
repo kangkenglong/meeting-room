@@ -12,11 +12,11 @@ export const MeetingRoom = () => {
         meetingRoomList,
         handleSearch,
         handleChangedDate,
-        // handleUpdateCurrentMeetingRoom,
         handleUpdateCurrentMeetingRoomId,
     } = useMeetingRoom();
     const currentMeetingRoomId = currentMeetingRoom?.id || '';
     const {date} = searchParams;
+    console.log(0);
 
     return (
         <div className={styles.meetingRoom}>
@@ -27,7 +27,7 @@ export const MeetingRoom = () => {
                     <MeetingRoomList currentRoomId={currentMeetingRoomId} roomList={meetingRoomList} onChangedMeetingRoomId={handleUpdateCurrentMeetingRoomId} />
                 </div>
                 <div className='content--right'>
-                    <MeetingRoomSchedule meetingRoom={currentMeetingRoom} />
+                    <MeetingRoomSchedule />
                 </div>
             </div>
         </div>

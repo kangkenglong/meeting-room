@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { useAction, useSelector } from "core-fe/src";
+import { useEffect, useRef } from "react";
+import { useAction, useBinaryAction, useSelector, useUnaryAction } from "core-fe/src";
 import dayjs from 'dayjs';
+import { meetingRoomActions } from "@store/meetingRoom";
 import { DATE_FORMAT } from "../constants";
-import { meetingRoomModule } from '@store/meetingRoom';
-import { MeetingRoomInfo } from "../types";
-import { RootState, MEETING_ROOM_NAME, MeetingRoom } from "@module/types";
+import { MEETING_ROOM_NAME } from '@module/types';
+import type { RootState, MeetingRoomInfoBySearch, MeetingRoom } from "@module/types";
 
 type SearchParams = {
     date: string;
@@ -12,77 +12,61 @@ type SearchParams = {
 }
 
 type UseMeetingRoom = {
-    meetingRoomList: MeetingRoomInfo[];
+    meetingRoomList: MeetingRoomInfoBySearch[];
     searchParams: SearchParams;
-    currentMeetingRoom: MeetingRoomInfo | null;
+    currentMeetingRoom: MeetingRoomInfoBySearch | null;
     handleSearch: (keywords: string) => void;
     handleChangedDate: (date: number) => void;
     handleUpdateCurrentMeetingRoomId: (id: string) => void;
-    // handleUpdateCurrentMeetingRoom: (meetingRoom: MeetingRoomInfo) => void;
 }
 
 export const useMeetingRoom = (): UseMeetingRoom => {
     const originMeetingRooms = useSelector<RootState, MeetingRoom[]>((state) => {
         return state.app[MEETING_ROOM_NAME].meetingRooms;
     });
-    const [meetingRoomList, setMeetingRoomList] = useState<MeetingRoomInfo[]>([]);
-    const [currentMeetingRoom, setCurrentMeetingRoom] = useState<MeetingRoomInfo | null>(null);
+    const meetingRoomList = useSelector<RootState, MeetingRoomInfoBySearch[]>((state) => {
+        return state.app[MEETING_ROOM_NAME].meetingRoomListBySearch;
+    });
+    const currentMeetingRoom = useSelector<RootState, MeetingRoomInfoBySearch | null>((state) => {
+        return state.app[MEETING_ROOM_NAME].currentMeetingRoom;
+    });
+
+    const resetCurrentMeetingRoom = useAction(meetingRoomActions.resetCurrentMeetingRoom);
+    const setCurrentMeetingRoom = useUnaryAction(meetingRoomActions.setCurrentMeetingRoom);
+    const getMeetingRoomListBySearch = useBinaryAction(meetingRoomActions.getMeetingRoomListBySearch);
+
     const searchParams = useRef<SearchParams>({
         date: '',
         keywords: '',
     });
 
     useEffect(() => {
-        const date = dayjs(new Date()).format(DATE_FORMAT);
+        handleInitSearchParams();
+    }, []);
 
-        handleUpateSearchParams({date});
+    useEffect(() => {
+        handleUpdateMeetingRoomList();
     }, [originMeetingRooms]);
 
-    const handleClearCurrentMeetingRoom = () => {
-        setCurrentMeetingRoom(null);
-    }
+    useEffect(() => {
+        if (currentMeetingRoom) {
+            handleUpdateCurrentMeetingRoomId(currentMeetingRoom.id);
+        }
+    }, [meetingRoomList]);
 
-    const handleUpdateCurrentMeetingRoom = (meetingRooms: MeetingRoomInfo[]) => {
-        // setCurrentMeetingRoom(meetingRoom);
+    const handleInitSearchParams = () => {
+        const date = dayjs(new Date()).format(DATE_FORMAT);
+
+        searchParams.current = {
+            ...searchParams.current,
+            date,
+        };
     }
 
     const handleUpdateMeetingRoomList = () => {
         const {date, keywords} = searchParams.current;
-        let meetingRoom = originMeetingRooms;
 
-        if (originMeetingRooms.length === 0) {
-            return;
-        }
-
-        if (keywords.length > 0) {
-            meetingRoom = originMeetingRooms.filter(({name}) => name.includes(keywords)) || [];
-        }
-
-        if (meetingRoom.length === 0) {
-            setMeetingRoomList([]);
-            setCurrentMeetingRoom(null);
-            return;
-        }
-
-        const newMeetingRoomList = meetingRoom.map(({id, name, schedule}) => {
-            const holpTimes = schedule[date] || [];
-
-            return {
-                id,
-                name,
-                date,
-                freeTime: 12 - holpTimes.length,
-                schedule: holpTimes,
-            }
-        });
-
-        setMeetingRoomList(newMeetingRoomList);
-
-        if (currentMeetingRoom) {
-            const newCurrentMeetingRoom = newMeetingRoomList.find(({id: roomId}) => roomId === currentMeetingRoom.id);
-
-            setCurrentMeetingRoom(newCurrentMeetingRoom || null);
-        }
+        getMeetingRoomListBySearch(date, keywords);
     }
 
     const handleUpateSearchParams = (params: Partial<SearchParams>) => {
@@ -95,12 +79,12 @@ export const useMeetingRoom = (): UseMeetingRoom => {
     }
 
     const handleChangedDate = (date: number) => {
-        handleClearCurrentMeetingRoom();
+        resetCurrentMeetingRoom();
         handleUpateSearchParams({date: dayjs(date).format(DATE_FORMAT)});
     }
 
     const handleSearch = (keywords: string) => {
-        handleClearCurrentMeetingRoom();
+        resetCurrentMeetingRoom();
         handleUpateSearchParams({keywords});
     }
 
@@ -122,7 +106,6 @@ export const useMeetingRoom = (): UseMeetingRoom => {
         meetingRoomList,
         handleSearch,
         handleChangedDate,
-        // handleUpdateCurrentMeetingRoom,
         handleUpdateCurrentMeetingRoomId,
     };
 }

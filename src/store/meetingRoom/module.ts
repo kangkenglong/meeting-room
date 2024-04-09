@@ -6,6 +6,7 @@ import {
     type MeetingRoom,
     type ReserveParams,
     DeleteScheduleParams,
+    type MeetingRoomInfoBySearch,
 } from '@module/types';
 
 export class MeetingRoomModule extends Module<RootState, MeetingRoomModuleName> {
@@ -17,12 +18,72 @@ export class MeetingRoomModule extends Module<RootState, MeetingRoomModuleName> 
         return this.state.meetingRooms;
     }
 
+    *resetCurrentMeetingRoom(): SagaGenerator {
+        this.setState({
+            currentMeetingRoom: null,
+        });
+    }
+
+    *setCurrentMeetingRoom(meetingRoom: MeetingRoomInfoBySearch): SagaGenerator {
+        this.setState({
+            currentMeetingRoom: meetingRoom,
+        });
+    }
+
+    *updateCurrentMeetingRoom(): SagaGenerator {
+        const {currentMeetingRoom: oldCurrentMeetingRoom, meetingRoomListBySearch} = this.state;
+
+        if (!oldCurrentMeetingRoom) {
+            return;
+        }
+
+        const meetinRoom = meetingRoomListBySearch.find(({id}) => id === oldCurrentMeetingRoom.id);
+
+        if (!meetinRoom) {
+            return;
+        }
+
+        this.setState({
+            currentMeetingRoom: meetinRoom,
+        });
+    }
+
+    *getMeetingRoomListBySearch(date: string, keywords: string): SagaGenerator {
+        const {meetingRooms} = this.state;
+        let meetingRoomList = meetingRooms;
+
+        if (keywords.length > 0) {
+            meetingRoomList = meetingRooms.filter(({name}) => name.includes(keywords));
+        }
+
+        if (meetingRoomList.length === 0) {
+            this.setState({
+                meetingRoomListBySearch: [],
+            });
+            return;
+        }
+
+        this.setState((draf) => {
+            draf.meetingRoomListBySearch = meetingRoomList.map(({id, name, schedule}) => {
+                const holpTimes = schedule[date] || [];
+    
+                return {
+                    id,
+                    name,
+                    date,
+                    freeTime: 12 - holpTimes.length,
+                    schedule: holpTimes,
+                }
+            });
+        });
+    }
+
     *reserveMeetingRoom({
         roomId,
         date,
         ...newSchedule
     }: ReserveParams): SagaGenerator {
-        console.log(222222222222, roomId, date, newSchedule);
+        console.log('reserveMeetingRoom: ', roomId, date, newSchedule);
         this.setState((draf) => {
             const meetingRooms = draf.meetingRooms;
             const targetMeetingRoom = meetingRooms.find(({id}) => id === roomId);

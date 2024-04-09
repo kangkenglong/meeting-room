@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
-import type { MeetingScheduleInfo } from '@module/types';
+import type { MeetingRoomInfoBySearch, MeetingScheduleInfo } from '@module/types';
 import { SCHEDULE_LIST } from '../../constants';
 import { MeetingScheduleCard } from '../meetingScheduleCard/MeetingScheduleCard';
 import styles from './MeetingScheduleList.module.scss';
-import { MeetingRoomInfo } from '../../types';
 
 type Props = {
     currentTimeId: string;
-    meetingRoom: MeetingRoomInfo;
+    meetingRoom: MeetingRoomInfoBySearch;
     onChangedSchedule: (schedule: MeetingScheduleInfo) => void;
 }
 

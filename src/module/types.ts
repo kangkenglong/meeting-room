@@ -11,8 +11,6 @@ type UserModuleName = typeof USER_NAME;
 type MeetingScheduleInfo = {
     timeId: string;
     timeScope: string;
-    // date: string;
-    // roomId: string;
     ownerId?: string;
     ownerName?: string;
     inUse?: boolean;
@@ -20,11 +18,6 @@ type MeetingScheduleInfo = {
     purposeDescription?: string;
     participant?: string[];
 }
-
-// type ScheduleInfo = {
-//     freeTime: number;
-//     meetings: MeetingScheduleInfo;
-// }
 
 type MeetingSchedule = {
     [timestamp: string]: MeetingScheduleInfo[];
@@ -36,8 +29,18 @@ type MeetingRoom = {
     schedule: MeetingSchedule;
 }
 
+type MeetingRoomInfoBySearch = {
+    id: string;
+    name: string;
+    date: string;
+    freeTime: number;
+    schedule: MeetingScheduleInfo[];
+};
+
 type MeetingRoomState = {
     meetingRooms: MeetingRoom[];
+    meetingRoomListBySearch: MeetingRoomInfoBySearch[];
+    currentMeetingRoom: MeetingRoomInfoBySearch | null;
 }
 
 type UserInfo = {
@@ -80,4 +83,5 @@ export {
     type MeetingScheduleInfo,
     type ReserveParams,
     type DeleteScheduleParams,
+    type MeetingRoomInfoBySearch,
 };

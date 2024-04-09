@@ -3,22 +3,18 @@ import { Buttons } from '../buttons/Buttons';
 import { MeetingScheduleList } from '../meetingScheduleList/MeetingScheduleList';
 import { ScheduleInfo } from '../scheduleInfo/ScheduleInfo';
 import { useMeetingRoomSchedule } from '../../hooks/useMeetingRoomSchedule';
-import { MeetingRoomInfo } from '../../types';
 
-type Props = {
-    meetingRoom: MeetingRoomInfo | null;
-}
-
-export const MeetingRoomSchedule = ({
-    meetingRoom,
-}: Props) => {
+export const MeetingRoomSchedule = () => {
     const {
+        contextHolder,
         currentSchedule,
         scheduleFormData,
+        currentMeetingRoom,
         handleChangedSchedule,
         handleGetButtonConfig,
         handleUpdateFormData,
-    } = useMeetingRoomSchedule({meetingRoom});
+    } = useMeetingRoomSchedule();
+    console.log(111);
 
     const renderButtons = () => {
         if (!currentSchedule) {
@@ -31,7 +27,7 @@ export const MeetingRoomSchedule = ({
     }
 
     const renderContent = () => {
-        if (!meetingRoom) {
+        if (!currentMeetingRoom) {
             return null;
         }
 
@@ -43,7 +39,7 @@ export const MeetingRoomSchedule = ({
                     </div>
                     <MeetingScheduleList
                         currentTimeId={currentSchedule?.timeId || ''}
-                        meetingRoom={meetingRoom}
+                        meetingRoom={currentMeetingRoom}
                         onChangedSchedule={handleChangedSchedule}
                     />
                 </div>
@@ -59,8 +55,11 @@ export const MeetingRoomSchedule = ({
     }
 
     return (
-        <div className={styles.meetingRoomSchedule}>
-            {renderContent()}
-        </div>
+        <>
+            <div className={styles.meetingRoomSchedule}>
+                {renderContent()}
+            </div>
+            {contextHolder}
+        </>
     )
 }

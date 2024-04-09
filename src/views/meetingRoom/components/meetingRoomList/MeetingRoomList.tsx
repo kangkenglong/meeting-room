@@ -1,13 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useAction } from 'core-fe/src';
-import type { MeetingScheduleInfo } from '@module/types';
-import {meetingRoomActions} from '@store/meetingRoom';
+import type { MeetingRoomInfoBySearch } from '@module/types';
 import styles from './MeetingRoomList.module.scss';
 import { MeetingRoomCard } from '../meetingRoomCard/MeetingRoomCard';
-import { MeetingRoomInfo } from '../../types';
 
 type Props = {
-    roomList: MeetingRoomInfo[];
+    roomList: MeetingRoomInfoBySearch[];
     currentRoomId: string;
     onChangedMeetingRoomId: (id: string) => void;
 }
@@ -17,30 +13,11 @@ export const MeetingRoomList = ({
     currentRoomId,
     onChangedMeetingRoomId,
 }: Props) => {
-    // const [currentRoomId, setCurrentRoomId] = useState('');
-
-    // useEffect(() => {
-    //     handleInitCurrentRoomId();
-    // }, [roomList]);
-
-    // const handleInitCurrentRoomId = () => {
-    //     if (roomList.length === 0) {
-    //         return;
-    //     }
-
-    //     if (currentRoomId.length !== 0) {
-    //         return;
-    //     }
-
-    //     setCurrentRoomId(roomList[0].id);
-    // }
-
     const handleChangedCurrentRoomId = (id: string) => {
         if (id === currentRoomId) {
             return;
         }
 
-        // setCurrentRoomId(id);
         onChangedMeetingRoomId(id);
     }
 
