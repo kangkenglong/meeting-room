@@ -6,11 +6,12 @@ import { ParticipantSelector } from '../participantSelector/ParticipantSelector'
 import { userModule } from '@store/user';
 
 type Props = {
+    currentDate: string;
     scheduleInfo: Partial<MeetingScheduleInfo>;
     onUpdateFormData: (data: Partial<MeetingScheduleInfo>) => void;
 };
 
-export const ScheduleInfoForm = ({ scheduleInfo, onUpdateFormData }: Props) => {
+export const ScheduleInfoForm = ({ currentDate, scheduleInfo, onUpdateFormData }: Props) => {
     const { ownerId, ownerName, timeScope, usePurpose, purposeDescription, participant = [] } = scheduleInfo;
     const { userId: currentUserId } = userModule.state.userInfo;
     const isReadOnly = currentUserId !== ownerId;
@@ -40,7 +41,9 @@ export const ScheduleInfoForm = ({ scheduleInfo, onUpdateFormData }: Props) => {
     return (
         <div className={styles.scheduleInfoForm}>
             <div className="info-item">
-                <p className="info-item__label">时间段：{timeScope}</p>
+                <p className="info-item__label">
+                    时间段：{currentDate} {timeScope}
+                </p>
                 <div className="info-item__value"></div>
             </div>
             <div className="info-item">

@@ -4,11 +4,12 @@ import IconEmpty from '../../assets/icon-empty.png';
 import { ScheduleInfoForm } from '../scheduleInfoForm/ScheduleInfoForm';
 
 type Props = {
+    currentDate: string;
     scheduleInfo: Partial<MeetingScheduleInfo>;
     onUpdateFormData: (data: Partial<MeetingScheduleInfo>) => void;
 };
 
-export const ScheduleInfo = ({ scheduleInfo, onUpdateFormData }: Props) => {
+export const ScheduleInfo = ({ currentDate, scheduleInfo, onUpdateFormData }: Props) => {
     const renderContent = () => {
         if (!scheduleInfo.timeScope) {
             return (
@@ -19,7 +20,7 @@ export const ScheduleInfo = ({ scheduleInfo, onUpdateFormData }: Props) => {
             );
         }
 
-        return <ScheduleInfoForm scheduleInfo={scheduleInfo} onUpdateFormData={onUpdateFormData} />;
+        return <ScheduleInfoForm currentDate={currentDate} scheduleInfo={scheduleInfo} onUpdateFormData={onUpdateFormData} />;
     };
 
     return <div className={styles.scheduleInfo}>{renderContent()}</div>;

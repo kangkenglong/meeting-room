@@ -6,6 +6,4 @@ type ButtonsConfig = {
     onClick: () => void;
 };
 
-export {
-    type ButtonsConfig,
-};
+export { type ButtonsConfig };

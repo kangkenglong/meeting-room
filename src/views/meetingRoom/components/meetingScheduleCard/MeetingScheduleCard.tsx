@@ -14,6 +14,9 @@ export const MeetingScheduleCard = ({ timeScope, onClick, inUse = false, isSelec
     const classname = classNames(styles.meetingScheduleCard, {
         [styles.meetingScheduleCardSelected]: isSelected,
     });
+    const stateClassname = classNames('schedule-state', {
+        'schedule-state--actived': inUse,
+    });
 
     return (
         <div className={classname} onClick={onClick}>
@@ -22,7 +25,7 @@ export const MeetingScheduleCard = ({ timeScope, onClick, inUse = false, isSelec
                 <p>使用者：{userName}</p>
                 <p>用途：{usePurpose}</p>
             </div>
-            <div className="schedule-state">
+            <div className={stateClassname}>
                 <p>{inUse ? '占用' : '空闲'}</p>
             </div>
         </div>

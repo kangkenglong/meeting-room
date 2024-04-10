@@ -60,13 +60,13 @@ export const useMeetingRoom = (): UseMeetingRoom => {
             ...searchParams.current,
             date,
         };
-    };
+    }
 
     function handleUpdateMeetingRoomList() {
         const { date, keywords } = searchParams.current;
 
         getMeetingRoomListBySearch(date, keywords);
-    };
+    }
 
     function handleUpdateCurrentMeetingRoomId(id: string) {
         if (meetingRoomList.length === 0) {
@@ -78,7 +78,7 @@ export const useMeetingRoom = (): UseMeetingRoom => {
         if (meetingRoom) {
             setCurrentMeetingRoom(meetingRoom);
         }
-    };
+    }
 
     const handleUpateSearchParams = (params: Partial<SearchParams>) => {
         searchParams.current = {

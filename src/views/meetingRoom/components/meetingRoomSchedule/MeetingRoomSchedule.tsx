@@ -23,11 +23,13 @@ export const MeetingRoomSchedule = () => {
             return null;
         }
 
+        const { date } = currentMeetingRoom;
+
         return (
             <>
                 <div className="schedule-list">
                     <div className="title">
-                        <span>日程</span>
+                        <span>日程 {date}</span>
                     </div>
                     <MeetingScheduleList
                         currentTimeId={currentSchedule?.timeId || ''}
@@ -40,7 +42,7 @@ export const MeetingRoomSchedule = () => {
                         <span>日程详情</span>
                         {renderButtons()}
                     </div>
-                    <ScheduleInfo scheduleInfo={scheduleFormData} onUpdateFormData={handleUpdateFormData} />
+                    <ScheduleInfo currentDate={date} scheduleInfo={scheduleFormData} onUpdateFormData={handleUpdateFormData} />
                 </div>
             </>
         );

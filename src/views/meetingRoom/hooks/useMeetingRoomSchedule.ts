@@ -22,6 +22,9 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
     const currentMeetingRoom = useSelector<RootState, MeetingRoomInfoBySearch | null>((state) => {
         return state.app[MEETING_ROOM_NAME].currentMeetingRoom;
     });
+    const meetingRoomListBySearch = useSelector<RootState, MeetingRoomInfoBySearch[]>((state) => {
+        return state.app[MEETING_ROOM_NAME].meetingRoomListBySearch;
+    });
     const [currentSchedule, setCurrentSchedule] = useState<MeetingScheduleInfo | null>(null);
     const [scheduleFormData, setScheduleFormData] = useState<Partial<MeetingScheduleInfo>>({});
     const lastMeetingRoomId = useRef<string>('');
@@ -56,19 +59,40 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
 
     function isNeedSetDefaultSchedule(meetingRoom: MeetingRoomInfoBySearch): boolean {
         return !lastMeetingRoomId.current || lastMeetingRoomId.current !== meetingRoom.id || !currentSchedule;
-    };
+    }
 
     const verifyReserveRequestParams = (): boolean => {
         return Boolean(scheduleFormData.usePurpose?.length);
     };
 
+    const verifyHasSameTimeSchedule = (meetingRoomId: string, timeId: string): boolean => {
+        const otherMeetingRoom = meetingRoomListBySearch.filter(({ id }) => id !== meetingRoomId);
+
+        if (otherMeetingRoom.length === 0) {
+            return false;
+        }
+
+        const hasSchedule = otherMeetingRoom.some((room) => {
+            return room.schedule.some(({ timeId: id, ownerId }) => id === timeId && ownerId === currentUserId);
+        });
+
+        return hasSchedule;
+    };
+
     function handleClearState() {
         setCurrentSchedule(null);
         setScheduleFormData({});
-    };
+    }
 
     const handleReserveMeetingRoom = () => {
         if (!currentMeetingRoom) {
+            return;
+        }
+
+        const { id: roomId, date } = currentMeetingRoom;
+
+        if (verifyHasSameTimeSchedule(roomId, scheduleFormData.timeId!)) {
+            messageApi.error('同时段已有会议日程，无法再预定');
             return;
         }
 
@@ -76,8 +100,6 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
             messageApi.error('请输入使用用途');
             return;
         }
-
-        const { id: roomId, date } = currentMeetingRoom;
 
         reserveMeetingRoom({
             roomId,
@@ -171,6 +193,11 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
             return;
         }
 
+        if (currentMeetingRoom.schedule.length === SCHEDULE_LIST.length) {
+            handleClearState();
+            return;
+        }
+
         for (let i = 0; i < SCHEDULE_LIST.length; i++) {
             const schedule = SCHEDULE_LIST[i];
             const hasSchedule = currentMeetingRoom.schedule.some(({ timeId }) => timeId === schedule.timeId);
@@ -185,7 +212,7 @@ export const useMeetingRoomSchedule = (): UseMeetingRoomSchedule => {
                 break;
             }
         }
-    };
+    }
 
     const handleUpdateFormData = (formData: Partial<MeetingScheduleInfo>, isInital = false) => {
         let newFormData = {};
